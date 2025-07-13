@@ -1,196 +1,108 @@
-# RS School. React.
+# Taak 1: React project setup - Class components - Error boundary.
+
+## Application Requirements
+
+1. Divide your page into at least two sections/components. The smaller section should be at the top, and the larger section should be at the bottom.
+2. In the top section, place a _Search_ input and a "Search" button. The _Search_ component should look for a previously saved search term in the local storage (LS). If there isn't any, leave the input empty.
+3. The bottom section should be used for displaying search results (name and a small description).
+4. By default, the application makes a call to the selected API to get a list of items using the search term from the input (only the first page). If the input is empty, make a call to get all items.
+5. When the user modifies the _Search_ input and clicks the "Search" button, the application makes a call to the API with the newly provided search term (the search term should not have any trailing spaces; process the input) to get the results (only the first page).
+6. The provided search term should be saved to the LS. If the value exists, overwrite it.
+7. If your application makes a request to the server API, this should be visible to the user. Implement a Spinner, Skeleton, Loading Bar, Blurring Content, or any other appropriate method in your UI to indicate this.
+8. If the request didn't succeed (status code **4xx** or **5xx**), show the meaningful message. You can use [ModResponse](https://chromewebstore.google.com/detail/modresponse-mock-and-repl/bbjcdpjihbfmkgikdkplcalfebgcjjpm) or similar, to test this functionality.
+9. Wrap the application in an error boundary to catch errors. Report an error to the console and show a fallback UI (use respective methods for this). Create a button that will throw an error on click to test the functionality.
+
+## Template
+
+This template represents the possible layout for your app, but you can create your app based on your own preferences.
+
+Successful response.
+
+```
++-------------------------------------------------------+
+|                                                       |
+|  +------------------ Top controls ------------------+ |
+|  | +--------------------------+ +-----------------+ | |
+|  | | [Search Input Field]     | | [Search Button] | | |
+|  | +--------------------------+ +-----------------+ | |
+|  +--------------------------------------------------+ |
+|                                                       |
+|  +-------------------- Results ---------------------+ |
+|  | +----------------------------------------------+ | |
+|  | | Item Name  | Item Description                | | |
+|  | +----------------------------------------------+ | |
+|  | | [Item 1]   | [Description 1]                 | | |
+|  | | [Item 2]   | [Description 2]                 | | |
+|  | | ...        | ...                             | | |
+|  +--------------------------------------------------+ |
+|                                       [Error Button]  |
++-------------------------------------------------------+
+```
+
+Non-successful response.
+
+```
++-------------------------------------------------------+
+|                                                       |
+|  +------------------ Top controls ------------------+ |
+|  | +--------------------------+ +-----------------+ | |
+|  | | [Search Input Field]     | | [Search Button] | | |
+|  | +--------------------------+ +-----------------+ | |
+|  +--------------------------------------------------+ |
+|                                                       |
+|  +-------------------- Results ---------------------+ |
+|  |                                                  | |
+|  |                 Error description                | |
+|  |                                                  | |
+|  +--------------------------------------------------+ |
+|                                       [Error Button]  |
++-------------------------------------------------------+
+```
+
+## Technical Requirements
+
+1. Create a separate branch for this task. Branch name: "class-components".
+
+2. Follow the requirements for the project setup listed [here](./project-setup.md)
+
+3. Pick a RESTfull api which supports search and pagination (pagination might be referred as _offset_ and _limit_ params). E.g. https://pokeapi.co/, for Star Wars fans https://swapi.dev/api, for Star Trek fans https://stapi.co/api-documentation (OpenApi spec can be checked here https://editor.swagger.io/?url=https://stapi.co/api/v1/rest/common/download/stapi.yaml), or you can select another one complying with the requirements.
+
+4. All logical parts should be set into separate components such as CardList, Card, Search, Header, Main etc.
+
+5. **Use class components to get access to lifecycle events or state. Using hooks is forbidden at this stage. Patience, it won't last long.**
+
+6. You can use CSS frameworks (e.g. Tailwind CSS).
+
+## Points
+
+### Student can get 100 points:
+
+- Eslint is set up, when _lint_ command is run it doesn't produce any errors (if there are warnings score might be less) - **15 points**
+- Prettier is set up, _format:fix_ command fixes issues - **15 points**
+- Husky is set up, linting is run on pre-commit - **10 points**
+- Page is split into at least two sections, top one has _Search_ input and "Search" button, main section displays the list of results from the selected api when page is opened for the first time (loader should be shown while app makes a call to the api) - **20 points**
+- When user types something to the _Search_ input and clicks "Search" button, a loader is displayed and the list is changed according to the response results for a provided search term - **15 points**
+- The search term typed into the _Search_ input is saved in the LS when user clicks on "Search" button (check it by closing the tab and open the app in the new one - the initial call should contain previously entered search term) - **15 points**
+- Application is wrapped with ErrorBoundary, which logs error to a console and shows a fallback UI. There should be a button to throw an error - **10 points**
+
+### Penalties
+
+- **1. TypeScript & Code Quality**
+
+  - TypeScript isn't used: **-95 points**
+  - Usage of _any_: **-20 points per each**
+  - Usage of _ts-ignore_: **-20 points per each**
+  - Presence of _code-smells_ (God-object, chunks of duplicate code), commented code sections: **-10 points per each**
+
+- **2. React Best Practices**
+
+  - Direct DOM manipulations inside the React components: **-50 points per each**
+  - React hooks are used to get access to either state, or to the component lifecycle: **-70 points**
+
+- **3. External Dependencies**
 
-This course is aimed at the students of the RS School who have passed RS School Stage #2 and at the new students who have experience with:
+  - Usage of Redux or other state management libraries: **-100 points**
+  - Usage of component libraries, e.g. Material UI, Ant Design: **-100 points**
 
-- JavaScript
-- TypeScript
-- Git, GitHub (clone, add, commit, push, pull, merge, rebase, pull request flow)
-- NPM, Webpack
-- CSS3 / HTML5
-- Chrome DevTools, Figma
-- Understanding of how to interact with APIs (general understanding of REST and GraphQL)
-
-ATTENTION! Mentors for this course will be first distributed for the graduates of the RS School Stage #2 who have successfully completed the first assignment.
-
-### Course duration
-
-8 weeks are devoted to studying React and 3 more weeks to final task implementation. This course requires 20-40 hours per week.
-
-## Course program
-
-### Week #1 (7th of July, 2025)
-
-#### Theory
-
-- [RS School Documentation](https://rs.school/docs/en)
-- [History of React](modules/react-evolution/)
-- [Vite with React and the TypeScript](modules/react-setup-env/)
-- [Class Components](modules/class-component/)
-- [Error Boundaries](modules/error-boundary/)
-
-#### Practical tasks
-
-[Task 1](modules/tasks/class-components.md)
-
-- [General requirements for all tasks](https://github.com/rolling-scopes-school/tasks/blob/master/react/modules/tasks/README.md#general-requirements-for-all-the-tasks)
-
-#### Tests
-
-- Test 0. How to learn in RS School
-- Test 1. React components
-
-### Week #2 (14th of July, 2025)
-
-#### Theory
-
-- [React Tests](modules/testing/)
-
-#### Practical tasks
-
-[Task 2](modules/tasks/tests.md)
-
-- Cross-check review: [Task 1](modules/tasks/class-components.md)
-
-#### Tests
-
-- Test 2. React error boundary
-
-### Week #3 (21th of July, 2025)
-
-#### Theory
-
-- [Hooks](modules/hooks/)
-- [React Router](modules/router/)
-
-#### Practical tasks
-
-[Task 3](modules/tasks/functional-routing.md)
-
-- Cross-check review: [Task 2](modules/tasks/tests.md)
-- Mentor review: [Task 2](modules/tasks/tests.md)
-
-#### Tests
-
-- Test 3. React hooks
-- Test 4. React routing
-
-### Week #4 (28th of July, 2025)
-
-#### Theory
-
-- [Context API](modules/context-api/)
-- [State management in React. Redux. Zustand](modules/state-management/)
-
-#### Practical tasks
-
-[Task 4](modules/tasks/state-management.md)
-
-- Cross-check review: [Task 3](modules/tasks/functional-routing.md)
-- Mentor review: [Task 3](modules/tasks/functional-routing.md)
-
-#### Tests
-
-- Test 5. React testing and context
-
-### Week #5 (4th of August, 2025)
-
-#### Theory
-
-- [RTK Query. Tanstack Query](modules/state-management/queries.md)
-
-#### Practical tasks
-
-[Task 5](modules/tasks/queries.md)
-
-- Cross-check review: [Task 4](modules/tasks/state-management.md)
-- Mentor review: [Task 4](modules/tasks/state-management.md)
-
-#### Tests
-
-- Test 6. React Redux
-
-### Week #6 (11th of August, 2025)
-
-#### Theory
-
-- [Server-side rendering/generation in React. NextJS](modules/nextjs-ssr-ssg/)
-
-#### Practical tasks
-
-[Task 6](modules/tasks/nextjs-ssr-ssg.md)
-
-- Cross-check review: [Task 5](modules/tasks/queries.md)
-- Mentor review: [Task 5](modules/tasks/queries.md)
-
-#### Tests
-
-- Test 7. React SSR
-
-### Week #7 (18th of August, 2025)
-
-#### Theory
-
-- [Forms in React](modules/forms/)
-- [Portals in React. Creating reusable modals](modules/portals/)
-
-#### Practical tasks
-
-[Task 7](modules/tasks/forms.md)
-
-- Cross-check review: [Task 6](modules/tasks/nextjs-ssr-ssg.md)
-- Mentor review: [Task 6](modules/tasks/nextjs-ssr-ssg.md)
-
-#### Tests
-
-- Test 8. React forms
-
-### Week #8 (25th of August, 2025)
-
-#### Theory
-
-- [React Performance](modules/performance)
-
-#### Practical tasks
-
-[Task 8](modules/tasks/performance.md)
-
-- Cross-check review: [Task 7](modules/tasks/forms.md)
-- Mentor review: [Task 7](modules/tasks/forms.md)
-
-### Week #9 (1st of September, 2025)
-
-- [Technical React Interview](interview.md)
-- [REST client](modules/tasks/final.md)
-
-#### Practical tasks
-
-- Cross-check review: [Task 8](modules/tasks/performance.md)
-- Mentor review: [Task 8](modules/tasks/performance.md)
-
-### Week #10 (8th of September, 2025)
-
-- [Technical React Interview](interview.md)
-- [REST client](modules/tasks/final.md)
-
-### Week #11 (15th of September, 2025)
-
-- [Technical React Interview](interview.md)
-- [REST client](modules/tasks/final.md)
-
-### Week #12 (22th of September, 2025)
-
-#### Practical tasks
-
-- Cross-check review: [REST client](modules/tasks/final.md)
-- Mentor review: [REST client](modules/tasks/final.md)
-
-- At the end of the course, if you have a mentor, please ask them to write feedback about you. The mentor can do this by opening the RS APP, navigating to the 'My Students' page, and clicking the 'Give feedback' button next to your name.
-
-## Lectors
-
-- [Ihar Krasiuk](https://github.com/ragingyngvarr)
-- [Andrej Podlubnyj](https://github.com/andron13)
-- [Artyom Parfenenkov](https://github.com/ParfenenkovEdit)
-- [Dzmitry Yarmoshkin](https://github.com/SpaNb4)
-- [Marharyta Maletz](https://github.com/Margaryta-Maletz)
-- [Valery Dluski](https://github.com/valerydluski)
+- **4. Project Management**
+  - Pull Request doesn't follow guideline (including checkboxes in Score) [PR example](https://rs.school/docs/en/pull-request-review-process#pull-request-description-must-contain-the-following): **-10 points**
